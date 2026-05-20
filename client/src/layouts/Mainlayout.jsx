@@ -18,13 +18,13 @@ const MainLayout = () => {
 
         {/* CONTENT */}
         <main className="flex-1 p-4 dark:bg-gray-900 overflow-y-auto">
-          <Outlet />
+            <Outlet />
         </main>
 
       </div>
 
       {/* FOOTER */}
-      <Footer />
+      {/* <Footer /> */}
 
     </div>
   );

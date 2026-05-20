@@ -1,41 +1,33 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import useTheme from "../../theme/useTheme"; // 👈 import
+import useTheme from "../../theme/useTheme"; 
+import { MdOutlineDarkMode } from "react-icons/md";
+import { MdOutlineLightMode } from "react-icons/md";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme(); // 👈 use hook
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-md transition">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <nav className="bg-white dark:bg-gray-900 shadow-md transition-colors duration-300">
+      <div className="max-w-8xl mx-auto px-4 py-3 flex justify-between items-center">
         
         {/* LOGO */}
-        <div className="text-xl font-bold text-blue-600">
-          MyApp
+        <div className="text-xl font-bold text-blue-600 dark:text-blue-400">
+          Smart Learning Portal   
         </div>
 
-        {/* RIGHT SIDE */}
+        {/* RIGHT SIDE - Desktop */}
         <div className="hidden md:flex items-center gap-4">
-          
-          {/* 🌙 DARK MODE BUTTON */}
           <button
             onClick={toggleTheme}
-            className="px-3 py-1 border rounded dark:border-gray-600"
+            className="px-3 py-1  rounded dark:border-gray-600 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition"
           >
-            {theme === "light" ? "🌙" : "☀️"}
-          </button>
-
-          <button className="px-4 py-1 border rounded hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white">
-            Login
-          </button>
-
-          <button className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
-            Signup
+            {theme === "light" ? <MdOutlineDarkMode /> : <MdOutlineLightMode />}
           </button>
         </div>
 
-        {/* MOBILE BUTTON */}
+        {/* MOBILE MENU BUTTON */}
         <button
           className="md:hidden text-2xl dark:text-white"
           onClick={() => setIsOpen(!isOpen)}
@@ -55,21 +47,11 @@ const Navbar = () => {
           </ul>
 
           <div className="mt-4 flex flex-col gap-2">
-            
-            {/* MOBILE TOGGLE */}
             <button
               onClick={toggleTheme}
-              className="border p-2 rounded dark:border-gray-600 dark:text-white"
+              className="border p-2 rounded dark:border-gray-600 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition"
             >
               {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
-            </button>
-
-            <button className="border p-2 rounded dark:border-gray-600 dark:text-white">
-              Login
-            </button>
-
-            <button className="bg-blue-600 text-white p-2 rounded">
-              Signup
             </button>
           </div>
         </div>
