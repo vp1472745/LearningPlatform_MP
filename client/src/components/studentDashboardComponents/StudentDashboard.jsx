@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import api from "../../utils/api";
 const StudentDashboard = () => {
   const student = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -12,11 +12,8 @@ const StudentDashboard = () => {
   useEffect(() => {
     const fetchBatch = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/batch/${student?.batchId}`
-        );
-        const data = await res.json();
-        setBatch(data.data || data);
+        const res = await api.get(`/batch/${student?.batchId}`);
+        setBatch(res.data.data || res.data);
       } catch (err) {
         console.log(err);
       }
@@ -29,11 +26,10 @@ const StudentDashboard = () => {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/subject/student?branch=${student?.branch}&semester=${student?.semester}`
+        const res = await api.get(
+          `/subject/student?branch=${student?.branch}&semester=${student?.semester}`
         );
-        const data = await res.json();
-        setSubjectData(data.data);
+        setSubjectData(res.data.data);
       } catch (err) {
         console.log(err);
       } finally {
