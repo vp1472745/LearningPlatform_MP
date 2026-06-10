@@ -16,15 +16,10 @@ connectDB();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://your-netlify-site.netlify.app",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: true, // dev ke liye ok
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
