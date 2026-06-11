@@ -18,17 +18,24 @@ const AttendanceScanner = () => {
       setStudent(res.data.student);
 
       toast.success("Attendance Marked ✅");
+
     } catch (error) {
       const message = error.response?.data?.message;
 
-      // ⭐ IMPORTANT FIX HERE
-      if (message === "Already marked today") {
-        toast.error("⚠️ Already scanned today");
-      } else if (message === "Invalid or expired QR") {
+      console.log("ERROR MESSAGE:", message); // 🔥 DEBUG
+
+      // ✅ FIXED CONDITIONS (REAL BACKEND MESSAGES)
+
+      if (message?.includes("already")) {
+        toast.error("⚠️ Already marked today");
+      } 
+      else if (message?.includes("Invalid")) {
         toast.error("❌ Invalid QR Code");
-      } else if (message === "Unauthorized scanner") {
+      } 
+      else if (message?.includes("Unauthorized")) {
         toast.error("🚫 Unauthorized Scanner");
-      } else {
+      } 
+      else {
         toast.error(message || "Something went wrong");
       }
     }
