@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import api from "../../../utils/api";
 import { toast } from "react-hot-toast";
@@ -6,12 +6,20 @@ import { toast } from "react-hot-toast";
 const AttendanceScanner = () => {
   const [student, setStudent] = useState(null);
 
+  // prevent multiple scans at same time
+  const scanningRef = useRef(false);
+
   const handleScan = async (result) => {
-    if (!result?.[0]?.rawValue) return;
+    const value = result?.[0]?.rawValue;
+    if (!value) return;
+
+    // prevent duplicate rapid scans
+    if (scanningRef.current) return;
+    scanningRef.current = true;
 
     try {
       const res = await api.post("/attendance/scan", {
-        qrCode: result[0].rawValue,
+        qrCode: value,
         key: "MY_SECURE_APP_KEY",
       });
 
@@ -20,24 +28,28 @@ const AttendanceScanner = () => {
       toast.success("Attendance Marked ✅");
 
     } catch (error) {
-      const message = error.response?.data?.message;
+      const message = error?.response?.data?.message || "";
 
-      console.log("ERROR MESSAGE:", message); // 🔥 DEBUG
+      console.log("SCAN ERROR:", message);
 
-      // ✅ FIXED CONDITIONS (REAL BACKEND MESSAGES)
-
-      if (message?.includes("already")) {
+      // ✅ EXACT BACKEND MATCH FIX
+      if (message === "Attendance already marked today") {
         toast.error("⚠️ Already marked today");
       } 
-      else if (message?.includes("Invalid")) {
+      else if (message === "Invalid QR Code") {
         toast.error("❌ Invalid QR Code");
       } 
-      else if (message?.includes("Unauthorized")) {
+      else if (message === "Unauthorized scanner") {
         toast.error("🚫 Unauthorized Scanner");
       } 
       else {
         toast.error(message || "Something went wrong");
       }
+    } finally {
+      // allow next scan after small delay
+      setTimeout(() => {
+        scanningRef.current = false;
+      }, 2000);
     }
   };
 
