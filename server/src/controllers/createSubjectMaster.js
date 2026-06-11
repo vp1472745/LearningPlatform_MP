@@ -298,15 +298,12 @@ export const updateSubject = async (req, res) => {
     }
   };
 
-
-
-    export const getStudentSubjects = async (req, res) => {
+export const getStudentSubjects = async (req, res) => {
   try {
-    const { branch, semester } = req.query;
+    const { branch, batchId } = req.query;
 
     const data = await SubjectMaster.findOne({
       branch,
-      semester,
       isActive: true,
     });
 
